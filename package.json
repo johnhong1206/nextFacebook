@@ -8,8 +8,23 @@
     "start": "next start"
   },
   "dependencies": {
+    "@material-ui/core": "^4.11.3",
+    "@material-ui/icons": "^4.11.2",
+    "@reduxjs/toolkit": "^1.5.1",
+    "add": "^2.0.6",
+    "axios": "^0.21.1",
+    "firebase": "^8.3.1",
     "next": "10.1.2",
+    "next-images": "^1.7.0",
+    "pusher-js": "^7.0.3",
     "react": "17.0.2",
-    "react-dom": "17.0.2"
+    "react-dom": "17.0.2",
+    "react-firebase-hooks": "^3.0.3",
+    "react-redux": "^7.2.3",
+    "redux": "^4.0.5",
+    "redux-persist": "^6.0.0",
+    "redux-thunk": "^2.3.0",
+    "styled-components": "^5.2.2",
+    "yarn": "^1.22.10"
   }
 }
