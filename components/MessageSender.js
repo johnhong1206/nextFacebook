@@ -7,12 +7,17 @@ import InsertEmotionIcon from "@material-ui/icons/InsertEmoticon";
 import axios from "../config/axios";
 import { auth } from "../config/firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
+import SendIcon from "@material-ui/icons/Send";
+import ArrowBackIosIcon from "@material-ui/icons/ArrowBackIos";
+import AttachFileIcon from "@material-ui/icons/AttachFile";
 
 function MessageSender() {
   const [input, setInput] = useState("");
   const [imageUrl, setImageUrl] = useState("");
   const [image, setImage] = useState(null);
   const [user, loading] = useAuthState(auth);
+  const [progress, setProgress] = useState(0);
+  const [sendImg, setSendImg] = useState(false);
 
   const handleChange = (e) => {
     if (e.target.files[0]) {
@@ -23,8 +28,13 @@ function MessageSender() {
   const handleSubmit = (e) => {
     e.preventDefault();
 
+    if (!image && !input) {
+      return false;
+    }
+
     if (image) {
       const imgForm = new FormData();
+
       imgForm.append("file", image, image.name);
       axios
         .post("/upload/image", imgForm, {
@@ -35,8 +45,6 @@ function MessageSender() {
           },
         })
         .then((res) => {
-          console.log(res.data);
-
           const postData = {
             text: input,
             imgName: res.data.filename,
@@ -44,8 +52,9 @@ function MessageSender() {
             profilePic: user.photoURL,
             timestamp: Date.now(),
           };
-          console.log(postData);
           savePost(postData);
+          setImage(null);
+          setInput("");
         });
     } else {
       const postData = {
@@ -56,11 +65,11 @@ function MessageSender() {
       };
       console.log(postData);
       savePost(postData);
+      setInput("");
     }
-
     setInput("");
-    setImageUrl("");
     setImage(null);
+    setSendImg(false);
   };
 
   const savePost = async (postData) => {
@@ -80,11 +89,20 @@ function MessageSender() {
             className="messageSender__input"
             placeholder={`What's on your mind`}
           />
-          <input
-            type="file"
-            onChange={handleChange}
-            className="messageSender__input"
-          />
+          {sendImg ? (
+            <input
+              type="file"
+              onChange={handleChange}
+              className="messageSender__input"
+            />
+          ) : (
+            <>
+              <AttachFileIcon
+                onClick={() => setSendImg(true)}
+                className="icon"
+              />
+            </>
+          )}
           <button onClick={handleSubmit} type="submit">
             Hidden submit
           </button>
@@ -128,9 +146,12 @@ const MessageSenderHeader = styled.div`
   > form {
     flex: 1;
     display: flex;
+    align-items: center;
+    cursor: pointer;
   }
 
   > form > input {
+    height: 30px;
     outline-width: 0;
     border: none;
     padding: 5px 20px;
@@ -167,5 +188,15 @@ const MessageSenderOption = styled.div`
   > h3 {
     font-size: medium;
     margin-left: 10px;
+  }
+`;
+
+const ProgressContainer = styled.div`
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+  > progress {
+    flex: 1;
   }
 `;
