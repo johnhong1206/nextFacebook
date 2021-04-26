@@ -10,6 +10,7 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import SendIcon from "@material-ui/icons/Send";
 import ArrowBackIosIcon from "@material-ui/icons/ArrowBackIos";
 import AttachFileIcon from "@material-ui/icons/AttachFile";
+import CancelIcon from "@material-ui/icons/Cancel";
 
 function MessageSender() {
   const [input, setInput] = useState("");
@@ -90,11 +91,17 @@ function MessageSender() {
             placeholder={`What's on your mind`}
           />
           {sendImg ? (
-            <input
-              type="file"
-              onChange={handleChange}
-              className="messageSender__input"
-            />
+            <div style={{ display: "flex", alignItems: "center" }}>
+              <input
+                type="file"
+                onChange={handleChange}
+                className="messageSender__input"
+              />
+              <CancelIcon
+                style={{ color: "red" }}
+                onClick={() => setSendImg(false)}
+              />
+            </div>
           ) : (
             <>
               <AttachFileIcon
